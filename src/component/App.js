@@ -1,28 +1,189 @@
 import React from 'react'
+import { connect } from 'react-redux'
 
 import Playground from './Playground'
 
-import '../style.css'
+const RandInt = (max) => {
+    return Math.floor(Math.random() * (max))
+}
 
+const getNeighbours = (x, y, playground) => {
+    const h = playground.length
+    const w = playground[0].length
+    if(y > h || y < 0 || x < 0 || x > w){
+        return []
+    }
+    let neighbours = []
+    if( y > 0) {
+        if (x > 0){
+            neighbours.push(playground[y-1][x-1])
+        }
+        neighbours.push(playground[y-1][x])
+        if (x < w-1){
+            neighbours.push(playground[y-1][x+1])
+        }
+    }
+    if (x > 0){
+        neighbours.push(playground[y][x-1])
+    }
+    neighbours.push(playground[y][x])
+    if (x < w-1){
+        neighbours.push(playground[y][x+1])
+    }
+    if( y < h-1) {
+        if (x > 0){
+            neighbours.push(playground[y+1][x-1])
+        }
+        neighbours.push(playground[y+1][x])
+        if (x < w-1){
+            neighbours.push(playground[y+1][x+1])
+        }
+    }
+    return (neighbours)
+}
+
+// Nice to have: use int value to specify box status (ex: 0: hidden, 1: displayed, 2: flagged, 3: unknown)
+const createPlayground = (width, height, bombs = 1) =>
+{
+    // Create playground.
+    let playground = []
+    for(let i = 0; i < height; i++){
+        playground[i] = []
+        for(let j = 0; j < width; j++){
+            playground[i][j] = {
+                x : j,
+                y : i,
+                key : i * width + j,
+                val : 0,
+                open : false,
+                flag : '',
+            }
+        }
+    }
+    // Place bombs.
+    let nbBombs = Math.max(1, Math.min( bombs, width * height -1))
+    let x = 0
+    let y = 0
+    while(nbBombs > 0){
+        x = RandInt(width)
+        y = RandInt(height)
+        if (playground[y][x].val === 0)
+        {
+            playground[y][x].val = -1
+            nbBombs--
+        }
+    }
+    // Set box value based on bombs proximity
+    playground.map(row => row.map( box => {
+        if (box.val === 0){
+            const neighbours = getNeighbours(box.x, box.y, playground)
+            neighbours.map(neighbour => {if(neighbour.val === -1){box.val++}})
+        }
+    }))
+    return(
+        playground
+    )
+}
 
 class App extends React.Component {
     state = {
         playground: [],
-        mode: 'pick',
+        mode: 'one',
+        gameOver: false,
     }
     render(){
         return(
             <div>
                 <div>
-                    <button type="button" className="btn btn-primary">Check case</button>
+                    <button type="button" className="btn btn-primary"  onClick={() =>
+                        this.props.changeModeActionCreator('one')} >Check case</button>
                     <button type="button" className="btn btn-danger">Mark bomb</button>
                     <button type="button" className="btn btn-warning">Unknown</button>
-                    <button type="button" className="btn btn-success">Check neighbours</button>
+                    <button type="button" className="btn btn-success"onClick={() =>
+                        this.props.changeModeActionCreator('all')}>Check neighbours</button>
+                    <button type="button" className="btn btn-dark" onClick={() =>
+                        this.props.changePlayground(createPlayground(10, 5, 15))}>New playground</button>
                 </div>
-                <div><Playground /></div>
+                <div><Playground playground={this.props.playground}
+                    boxPressed={ (x,y) => this.props.boxPressed(x, y, this.props.playground, this.props.mode)}/></div>
             </div>
         )
     }
 }
 
-export default App
+const changePlaygroundActionCreator = (playground) => {
+    return {
+        type: 'CHANGE_PLAYGROUND',
+        payload: playground,
+    }
+}
+
+const changeModeActionCreator = (mode) => {
+    return {
+        type: 'CHANGE_MODE',
+        payload: mode,
+    }
+}
+
+// DOTO: real game over
+const checkBox = (x, y, playground) =>{
+    if (playground[y][x].open){
+        return playground
+    }
+    let new_playground = [...playground]
+    new_playground[y][x].open = true
+    const box = new_playground[y][x]
+    if (box.val === -1){
+        alert("PERDU")
+    }
+    if (box.val === 0){
+        const neighbours = getNeighbours(x, y, new_playground)
+        neighbours.map(neighbour => new_playground = checkBox(neighbour.x, neighbour.y, new_playground))
+    }
+    return new_playground
+}
+
+ const checkNeighbours = (x, y, playground) =>{
+    if (!playground[y][x].open){
+        return playground
+    }
+    let new_playground = [...playground]
+    const box = new_playground[y][x]
+    const neighbours = getNeighbours(x, y, new_playground)
+    neighbours.map(neighbour => new_playground = checkBox(neighbour.x, neighbour.y, new_playground))
+    return new_playground
+}
+
+const boxPressed = (x, y, playground, mode) => {
+    switch(mode){
+        case "one":
+            return checkBox(x, y, playground)
+        case "all":
+            return checkNeighbours(x, y, playground)
+        default:
+            return playground
+    }
+}
+
+const stateToProps = (state) => {
+    return {
+        playground: state.playground,
+        mode: state.mode,
+    }
+}
+
+const dispatchToProps = (dispatch) => {
+    return {
+        changePlayground: (playground) => {
+            dispatch(changePlaygroundActionCreator(playground))
+        },
+        changeModeActionCreator: (mode) => {
+            dispatch(changeModeActionCreator(mode))
+        },
+        boxPressed: (x, y, playground, mode) => {
+            dispatch(changePlaygroundActionCreator(boxPressed(x, y, playground, mode)))
+        }
+    }
+}
+
+export default connect(stateToProps, dispatchToProps)(App)

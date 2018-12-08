@@ -4,7 +4,7 @@ import '../style.css'
 
 const Box = (props) => {
     return (
-        <span className='Box' onClick={() => console.log("pon", props)}>{props.value}</span>
+        <span className='Box' onClick={() => props.boxPressed(props.box.x, props.box.y)}>{props.value}</span>
     )
 }
 
