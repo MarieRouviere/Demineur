@@ -13,7 +13,7 @@ const playgroundReducer = (state = [], action) => {
       return state
   }
 }
-const modeReducer = (state = "one", action) => {
+const modeReducer = (state = "ONE", action) => {
   switch(action.type) {
     case "CHANGE_MODE":
       return action.payload

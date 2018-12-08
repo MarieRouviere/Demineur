@@ -105,7 +105,8 @@ class App extends React.Component {
                   <Button intent="success" text="Check case" onClick={() =>
                     this.props.changeModeActionCreator('ALL')} />
                   <Button intent="success" text="New playground" onClick={() =>
-                    this.props.changePlayground(createPlayground(10, 5, 15))} />
+                    this.props.changePlayground(createPlayground(10, 5, 15))
+                  } />
                 </div>
                 <div><Playground playground={this.props.playground}
                     boxPressed={ (x,y) => this.props.boxPressed(x, y, this.props.playground, this.props.mode)}/></div>
@@ -179,6 +180,7 @@ const dispatchToProps = (dispatch) => {
     return {
         changePlayground: (playground) => {
             dispatch(changePlaygroundActionCreator(playground))
+            dispatch(changeModeActionCreator("ONE"))
         },
         changeModeActionCreator: (mode) => {
             dispatch(changeModeActionCreator(mode))
