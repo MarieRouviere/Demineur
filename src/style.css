@@ -1,27 +1,27 @@
 .App {
-    background-color: #282c34;
-  }
+  background-color: #282c34;
+}
 
-  .Playground {
-    background-color: #282c34;
-    align-items: center;
+.Playground {
+  background-color: #282c34;
+  align-items: center;
 }
 .PlaygroundFlex {
-    display: flex;
-    flex-flow: row wrap;
-    justify-content: space-around;
-    background-color: #282c34;
-    align-items: center;
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-around;
+  background-color: #282c34;
+  align-items: center;
 }
 
 .Box {
-    background-color: grey;
-    border-style: solid;
-    border-color: black;
-    color: antiquewhite;
-    width: 30px;
-    height: 30px;
-    margin: 2px;
-    text-align: center;
-    display: inline-block;
+  background-color: grey;
+  border-style: solid;
+  border-color: black;
+  color: antiquewhite;
+  width: 30px;
+  height: 30px;
+  margin: 2px;
+  text-align: center;
+  display: inline-block;
 }

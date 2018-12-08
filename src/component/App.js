@@ -1,6 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
+import { Button } from "@blueprintjs/core";
 import Playground from './Playground'
 
 const RandInt = (max) => {
@@ -88,21 +89,23 @@ const createPlayground = (width, height, bombs = 1) =>
 class App extends React.Component {
     state = {
         playground: [],
-        mode: 'one',
+        mode: 'ONE',
         gameOver: false,
     }
     render(){
         return(
             <div>
                 <div>
-                    <button type="button" className="btn btn-primary"  onClick={() =>
-                        this.props.changeModeActionCreator('one')} >Check case</button>
-                    <button type="button" className="btn btn-danger">Mark bomb</button>
-                    <button type="button" className="btn btn-warning">Unknown</button>
-                    <button type="button" className="btn btn-success"onClick={() =>
-                        this.props.changeModeActionCreator('all')}>Check neighbours</button>
-                    <button type="button" className="btn btn-dark" onClick={() =>
-                        this.props.changePlayground(createPlayground(10, 5, 15))}>New playground</button>
+                  <Button intent="success" text="Check case" onClick={() =>
+                    this.props.changeModeActionCreator('ONE')} />
+                  <Button intent="success" text="Mark bomb" onClick={() =>
+                    this.props.changeModeActionCreator('BOMB')} />
+                  <Button intent="success" text="Mark suspicious" onClick={() =>
+                    this.props.changeModeActionCreator('SUSPICIOUS')} />
+                  <Button intent="success" text="Check case" onClick={() =>
+                    this.props.changeModeActionCreator('ALL')} />
+                  <Button intent="success" text="New playground" onClick={() =>
+                    this.props.changePlayground(createPlayground(10, 5, 15))} />
                 </div>
                 <div><Playground playground={this.props.playground}
                     boxPressed={ (x,y) => this.props.boxPressed(x, y, this.props.playground, this.props.mode)}/></div>
@@ -156,9 +159,9 @@ const checkBox = (x, y, playground) =>{
 
 const boxPressed = (x, y, playground, mode) => {
     switch(mode){
-        case "one":
+        case "ONE":
             return checkBox(x, y, playground)
-        case "all":
+        case "ALL":
             return checkNeighbours(x, y, playground)
         default:
             return playground
