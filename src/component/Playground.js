@@ -4,15 +4,45 @@ import Box from './Box'
 
 import '../style.css'
 
-const drawRow = (row, props) =>
-{
-  return(
-    <div key={row[0].y} >
-      {row.map( box => (<Box key={box.key} value={box.open ? box.val : "?"}
-        boxPressed={props.boxPressed} box={box} className="Box" />))}
-    </div>
-  )
+const getClassName = (status, val) => {
+  switch(status) {
+    case 1:
+    return val === -1 ? 'BoxBomb' : 'Box'
+    case 2:
+      return 'FlagBomb'
+    case 3:
+      return 'FlagSuspicious'
+    default:
+      return 'BoxClose'
+  }
 }
+
+const getValue = (status, val) => {
+  switch(status) {
+    case 1:
+    return val
+    case 2:
+      return 'B'
+    case 3:
+      return '?'
+    default:
+      return '-'
+  }
+}
+
+const drawRow = (row, props) =>(
+  <div key={row[0].y} >
+    {row.map( box => (
+      <Box
+        key={box.key}
+        value={getValue(box.status, box.val)}
+        boxPressed={props.boxPressed}
+        box={box}
+        className={getClassName(box.status, box.val)}
+      />
+    ))}
+  </div>
+)
 
 const Playground = (props) => {
   if(props.playground.length === 0) {

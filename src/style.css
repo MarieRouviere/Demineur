@@ -22,6 +22,57 @@
   width: 30px;
   height: 30px;
   margin: 2px;
+  font-size: 20px;
   text-align: center;
+  display: inline-block;
+}
+
+.BoxClose {
+  background-color: darkgrey;
+  border-style: solid;
+  border-color: black;
+  color: darkgrey;
+  width: 30px;
+  height: 30px;
+  margin: 2px;
+  font-size: 20px;
+  text-align: center;
+  display: inline-block;
+}
+
+.FlagBomb {
+  background-color: lightslategray;
+  border-style: solid;
+  border-color: black;
+  color: red;
+  width: 30px;
+  height: 30px;
+  margin: 2px;
+  font-size: 20px;
+  text-align: center;
+  display: inline-block;
+}
+
+.FlagSuspicious {
+  background-color: lightslategray;
+  border-style: solid;
+  border-color: black;
+  color: blue;
+  width: 30px;
+  height: 30px;
+  margin: 2px;
+  font-size: 20px;
+  text-align: center;
+  display: inline-block;
+}
+
+.BoxBomb {
+  background-color: red;
+  border-style: solid;
+  border-color: black;
+  width: 30px;
+  height: 30px;
+  margin: 2px;
+  font-size: 20px;
   display: inline-block;
 }
