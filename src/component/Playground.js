@@ -7,7 +7,14 @@ import '../style.css'
 const getClassName = (status, val) => {
   switch(status) {
     case 1:
-    return val === -1 ? 'BoxBomb' : 'Box'
+      switch(val) {
+        case 0:
+          return 'ZeroBox'
+        case -1:
+          return 'BoxBomb'
+        default:
+          return 'Box'
+      }
     case 2:
       return 'FlagBomb'
     case 3:

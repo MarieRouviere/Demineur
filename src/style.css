@@ -27,6 +27,19 @@
   display: inline-block;
 }
 
+.ZeroBox {
+  background-color: grey;
+  border-style: solid;
+  border-color: black;
+  color: grey;
+  width: 30px;
+  height: 30px;
+  margin: 2px;
+  font-size: 20px;
+  text-align: center;
+  display: inline-block;
+}
+
 .BoxClose {
   background-color: darkgrey;
   border-style: solid;
